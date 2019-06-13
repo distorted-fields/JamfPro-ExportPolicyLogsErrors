@@ -19,8 +19,8 @@ password=""
 db=""
 
 #output file options - update if you desire a new location
-linuxOutput=/tmp/PolicyDetails-Errors.txt
-macOSoutput=/Users/Shared/PolicyDetails-Errors.txt
+linuxOutput=/tmp/PolicyLogs-Errors.txt
+macOSoutput=/Users/Shared/PolicyLogs-Errors.txt
 
 
 ##############################################################
@@ -175,8 +175,14 @@ function getLogs()
 			#select date_entered_epoch from logs where log_id=XXXX and computer_id=XXXX;
 			mysqlcommand="select date_entered_epoch from logs where log_id='${log_ids[$log_count]}' and computer_id='${computer_ids[$comp_count]}';"		
 			raw_policyDate=$($mySQL -u$user $db -se "$mysqlcommand")
-			#convert date
-			policyDate=$(echo $raw_policyDate | perl -pe 's/(\d+)/localtime($1)/e')
+			#convert date - depending on OS
+			if [ $OS == "1" ]
+			then
+				policyDate=$(date -d @$(($raw_policyDate/1000)))
+			elif [ $OS == "2" ]	
+			then
+				policyDate=$(date -r $(($raw_policyDate/1000)))
+			fi
 
 			#command to get policy details 
 			#select action from log_actions where log_id=XXXX;
@@ -187,7 +193,7 @@ function getLogs()
 			echo "Policy Name: $policyName" >> $output
 			echo "Execution Date: $policyDate" >> $output
 			echo "Details:" >> $output 
-			echo "$policyDetails" >> $output
+			echo -e "$policyDetails" >> $output
 			echo "" >> $output
 			((log_count++))
 		done
