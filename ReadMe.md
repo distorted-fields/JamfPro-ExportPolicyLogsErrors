@@ -13,5 +13,9 @@ There's a number of variables that can be hardcoded at the top of the script, in
 
 ## Process to run script
 1. Copy to databse server
-1. Run script with "bash /path/to/PolicyLog-Errors.sh"
+1. Run script with "bash /path/to/PolicyLog-Errors.sh" 
+    1. Use Terminal if on macOS.
 1. Fill in data as prompted.
+1. Data will be be in created output file:
+    1. Linx: "/tmp/PolicyLog-Errors.txt"
+    1. macOS: "/Users/Shared/PolicyLog-Errors.txt"
